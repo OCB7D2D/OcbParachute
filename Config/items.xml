@@ -1,0 +1,11 @@
+<configs>
+	<append xpath="/items">
+		<!-- Required to avoid some NPEs -->
+		<item name="OcbParachutePlaceable">
+			<property name="CreativeMode" value="None"/>
+			<!-- Required to avoid further NPEs -->
+			<property name="Material" value="Mcloth"/>
+			<property name="Meshfile" value="#Other/Items?Misc/sackPrefab.prefab"/>
+		</item>
+	</append>
+</configs>
