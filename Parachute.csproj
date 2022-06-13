@@ -85,6 +85,8 @@
     <Compile Include="Harmony\Parachute.cs" />
     <Compile Include="Harmony\AssemblyInfo.cs" />
     <Compile Include="Library\EntityVParachute.cs" />
+    <Compile Include="Library\NetPkgDespawnParachute.cs" />
+    <Compile Include="Library\NetPkgDeployParachute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\entityclasses.xml" />

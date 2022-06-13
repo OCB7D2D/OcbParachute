@@ -3,6 +3,8 @@ using UnityEngine;
 public class EntityVParachute : EntityDriveable
 {
 
+    public static EntityPlayerLocal Deployer = null;
+
     public override void Init(int _entityClass)
     {
         base.Init(_entityClass);
@@ -26,17 +28,15 @@ public class EntityVParachute : EntityDriveable
 
     protected override void DetachEntity(Entity _other)
     {
+        Deployer = null;
         base.DetachEntity(_other);
         ForceDespawn();
-    }
-
-    public override void OnAddedToWorld()
-    {
     }
 
     protected override void Update()
     {
         base.Update();
+        // Check if we have an attached player to update physics?
         if (GetAttachedPlayerLocal() is EntityPlayerLocal player)
         {
             vp_FPCamera cam = player.vp_FPCamera;
@@ -44,12 +44,22 @@ public class EntityVParachute : EntityDriveable
             transform.position = cam.DrivingPosition + Vector3.down * 2;
             ctr.m_NonRetardedFallSpeed = vehicleRB.velocity.y * 2f;
         }
-        else
+        else if (ConnectionManager.Instance.IsServer && !IsDriven())
         {
-            ForceDespawn();
+            // Make sure to clean-up all parachutes that are not driven
+            // And hope this never applies to parachutes you actually want
+            world.RemoveEntity(entityId, EnumRemoveEntityReason.Despawned);
         }
 
     }
+
+    // protected override void onSpawnStateChanged() { base.onSpawnStateChanged(); }
+
+    // public override void OnAddedToWorld() { base.OnAddedToWorld(); }
+
+    // public override void PostInit() { base.PostInit(); }
+
+    // protected override void Awake() { base.Awake(); }
 
     protected override void PhysicsInputMove()
     {
@@ -57,9 +67,7 @@ public class EntityVParachute : EntityDriveable
         if (vehicleRB == null) return;
         if (movementInput == null) return;
 
-
         vehicleRB.WakeUp();
-
 
         vehicleRB.velocity = new Vector3(
             vehicleRB.velocity.x * 0.95f,

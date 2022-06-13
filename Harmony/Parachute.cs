@@ -1,5 +1,6 @@
 using System.Reflection;
 using HarmonyLib;
+using Platform;
 using UnityEngine;
 
 public class OcbParachute : IModApi
@@ -20,8 +21,18 @@ public class OcbParachute : IModApi
         {
             if (__instance.AttachedToEntity is EntityVParachute parachute)
             {
-                __instance.Detach();
-                parachute.Detach();
+                if (!ConnectionManager.Instance.IsServer)
+                {
+                    ConnectionManager.Instance.SendToServer(
+                        NetPackageManager.GetPackage<NetPkgDespawnParachute>()
+                            .Setup(parachute.entityId));
+                }
+                else
+                {
+                    EntityVParachute.Deployer = null;
+                    __instance.Detach();
+                    // parachute.Detach();
+                }
             }
         }
     }
@@ -65,13 +76,13 @@ public class OcbParachute : IModApi
         static void Prefix(vp_FPController __instance)
         {
             // Register KeyPress on every frame update
-            HasKeyPress |= Input.GetKeyDown(KeyCode.G);
+            HasKeyPress |= Input.GetKeyDown(KeyCode.LeftControl);
         }
         static void Postfix(vp_FPController __instance)
         {
             // Fixes jitter when not driving (e.g. when falling in 3rd person view)
             // Note: You may still see a little jitter, but that is from motion blur ;)
-            __instance.CharacterController.transform.position = __instance.SmoothPosition;
+            //__instance.CharacterController.transform.position = __instance.SmoothPosition;
         }
     }
 
@@ -81,8 +92,6 @@ public class OcbParachute : IModApi
     {
 
         static bool TooltipShown = false;
-
-        static EntityVehicle parachute;
 
         public static void Postfix(
             bool ___m_Grounded,
@@ -95,7 +104,6 @@ public class OcbParachute : IModApi
         {
 
             var player = GameManager.Instance.World.GetPrimaryPlayer();
-            bool ParachuteDeployed = parachute != null && parachute.IsSpawned();
 
             // Reset flag when grounded
             if (___m_Grounded)
@@ -103,9 +111,9 @@ public class OcbParachute : IModApi
                 TooltipShown = false;
             }
             // Check if Tooltip should be shown when falling too fast
-            else if (ParachuteDeployed == false)
+            else if (EntityVParachute.Deployer == null)
             {
-                if (___m_FallSpeed < -0.2f && TooltipShown == false)
+                if (___m_FallSpeed < -0.25f && TooltipShown == false)
                 {
                     GameManager.ShowTooltip(
                         XUiM_Player.GetPlayer() as EntityPlayerLocal,
@@ -129,25 +137,46 @@ public class OcbParachute : IModApi
             // Check if parachute was toggled mid air
             if (___m_Grounded)
             {
-                if (ParachuteDeployed)
+                if (EntityVParachute.Deployer != null)
                 {
                     TooltipShown = false;
                 }
             }
-            else if (!ParachuteDeployed)
+            else if (EntityVParachute.Deployer == null)
             {
                 if (IsPressed && !WasPressed && ___m_FallSpeed < -0.15f)
                 {
                     // Load the parachute vehicle only once
-                    if (parachute == null) parachute = EntityFactory.CreateEntity(
-                        EntityClass.FromString("OcbParachute"), player.position,
-                        new Vector3(0f, player.rotation.y, 0f)) as EntityVehicle;
-
-                    GameManager.Instance.World.SpawnEntityInWorld(parachute);
-                    player.StartAttachToEntity(parachute);
+                    if (EntityVParachute.Deployer == null)
+                    {
+                        Log.Out("Open is requested");
+                        EntityVParachute.Deployer = player;
+                        int id = EntityClass.FromString("OcbParachute");
+                        var item = ItemClass.GetItem("OcbParachutePlaceable");
+                        if (!SingletonMonoBehaviour<ConnectionManager>.Instance.IsServer)
+                        {
+                            SingletonMonoBehaviour<ConnectionManager>.Instance.SendToServer(
+                                NetPackageManager.GetPackage<NetPkgDeployParachute>()
+                                    .Setup(id, player.position + Vector3.up,
+                                        new Vector3(0f, player.rotation.y, 0f),
+                                        item, player.entityId),
+                                    true);
+                        }
+                        else
+                        {
+                            var parachute = EntityFactory.CreateEntity(
+                                id, player.position + Vector3.up,
+                                new Vector3(0f, player.rotation.y, 0f)) as EntityVehicle;
+                            parachute.SetSpawnerSource(EnumSpawnerSource.StaticSpawner);
+                            parachute.SetOwner(PlatformManager.InternalLocalUserIdentifier);
+                            parachute.GetVehicle().SetItemValue(item);
+                            GameManager.Instance.World.SpawnEntityInWorld(parachute);
+                            player.StartAttachToEntity(parachute, 0);
+                        }
+                    }
                 }
             }
         }
     }
-    
+
 }

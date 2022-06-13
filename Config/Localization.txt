@@ -1,2 +1,2 @@
 ﻿Key,File,Type,english,german
-ttDeployParachute,UI,Tooltip,Deploy Parachute by Pressing G.,Drücke G um Fallschirm zu öffnen.
+ttDeployParachute,UI,Tooltip,Deploy Parachute by Pressing Left Control Key.,Drücke Linke Control Taste um Fallschirm zu öffnen.
