@@ -11,6 +11,11 @@ This is only a proof of concept (work in progress)!
 
 ## Changelog
 
+### Version 0.2.1
+
+- Add item action to deploy parachute
+- Improve undead legacy compatibility
+
 ### Version 0.2.0
 
 - Fix multi-player support

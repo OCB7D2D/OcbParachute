@@ -6,9 +6,11 @@ using UnityEngine;
 public class OcbParachute : IModApi
 {
 
+    static public KeyCode ParachuteHotKey = KeyCode.LeftControl;
+
     public void InitMod(Mod mod)
     {
-        Debug.Log("Loading OCB Parachute Patch: " + GetType().ToString());
+        Log.Out("Loading OCB Parachute Patch: " + GetType().ToString());
         var harmony = new Harmony(GetType().ToString());
         harmony.PatchAll(Assembly.GetExecutingAssembly());
     }
@@ -75,8 +77,9 @@ public class OcbParachute : IModApi
     {
         static void Prefix(vp_FPController __instance)
         {
+            if (ParachuteHotKey == KeyCode.None) return;
             // Register KeyPress on every frame update
-            HasKeyPress |= Input.GetKeyDown(KeyCode.LeftControl);
+            HasKeyPress |= Input.GetKeyDown(ParachuteHotKey);
         }
         static void Postfix(vp_FPController __instance)
         {
@@ -103,6 +106,9 @@ public class OcbParachute : IModApi
             vp_FPController __instance)
         {
 
+            // Skip if HotKey was disabled from item action
+            if (ParachuteHotKey == KeyCode.None) return;
+
             var player = GameManager.Instance.World.GetPrimaryPlayer();
 
             // Reset flag when grounded
@@ -113,7 +119,7 @@ public class OcbParachute : IModApi
             // Check if Tooltip should be shown when falling too fast
             else if (EntityVParachute.Deployer == null)
             {
-                if (___m_FallSpeed < -0.25f && TooltipShown == false)
+                if (___m_NonRetardedFallSpeed < -0.25f && TooltipShown == false)
                 {
                     GameManager.ShowTooltip(
                         XUiM_Player.GetPlayer() as EntityPlayerLocal,
@@ -144,37 +150,42 @@ public class OcbParachute : IModApi
             }
             else if (EntityVParachute.Deployer == null)
             {
-                if (IsPressed && !WasPressed && ___m_FallSpeed < -0.15f)
+                if (IsPressed && !WasPressed && ___m_NonRetardedFallSpeed < -0.15f)
                 {
-                    // Load the parachute vehicle only once
-                    if (EntityVParachute.Deployer == null)
-                    {
-                        Log.Out("Open is requested");
-                        EntityVParachute.Deployer = player;
-                        int id = EntityClass.FromString("OcbParachute");
-                        var item = ItemClass.GetItem("OcbParachutePlaceable");
-                        if (!SingletonMonoBehaviour<ConnectionManager>.Instance.IsServer)
-                        {
-                            SingletonMonoBehaviour<ConnectionManager>.Instance.SendToServer(
-                                NetPackageManager.GetPackage<NetPkgDeployParachute>()
-                                    .Setup(id, player.position + Vector3.up,
-                                        new Vector3(0f, player.rotation.y, 0f),
-                                        item, player.entityId),
-                                    true);
-                        }
-                        else
-                        {
-                            var parachute = EntityFactory.CreateEntity(
-                                id, player.position + Vector3.up,
-                                new Vector3(0f, player.rotation.y, 0f)) as EntityVehicle;
-                            parachute.SetSpawnerSource(EnumSpawnerSource.StaticSpawner);
-                            parachute.SetOwner(PlatformManager.InternalLocalUserIdentifier);
-                            parachute.GetVehicle().SetItemValue(item);
-                            GameManager.Instance.World.SpawnEntityInWorld(parachute);
-                            player.StartAttachToEntity(parachute, 0);
-                        }
-                    }
+                    DeployParachute(player);
                 }
+            }
+        }
+
+    }
+
+    public static void DeployParachute(EntityPlayerLocal player)
+    {
+        // Load the parachute vehicle only once
+        if (EntityVParachute.Deployer == null)
+        {
+            EntityVParachute.Deployer = player;
+            int id = EntityClass.FromString("OcbParachute");
+            var item = ItemClass.GetItem("OcbParachutePlaceable");
+            if (!SingletonMonoBehaviour<ConnectionManager>.Instance.IsServer)
+            {
+                SingletonMonoBehaviour<ConnectionManager>.Instance.SendToServer(
+                    NetPackageManager.GetPackage<NetPkgDeployParachute>()
+                        .Setup(id, player.position + Vector3.up,
+                            new Vector3(0f, player.rotation.y, 0f),
+                            item, player.entityId),
+                        true);
+            }
+            else
+            {
+                var parachute = EntityFactory.CreateEntity(
+                    id, player.position + Vector3.up,
+                    new Vector3(0f, player.rotation.y, 0f)) as EntityVehicle;
+                parachute.SetSpawnerSource(EnumSpawnerSource.StaticSpawner);
+                parachute.SetOwner(PlatformManager.InternalLocalUserIdentifier);
+                parachute.GetVehicle().SetItemValue(item);
+                GameManager.Instance.World.SpawnEntityInWorld(parachute);
+                player.StartAttachToEntity(parachute, 0);
             }
         }
     }

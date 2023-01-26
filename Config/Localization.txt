@@ -1,2 +1,6 @@
 ﻿Key,File,Type,english,german
 ttDeployParachute,UI,Tooltip,Deploy Parachute by Pressing Left Control Key.,Drücke Linke Control Taste um Fallschirm zu öffnen.
+OcbParachuteDeployable,UI,Tooltip,Parachute Backpack.,Drücke Linke Control Taste um Fallschirm zu öffnen.
+OcbParachuteDeployableDesc,UI,Tooltip,Parachute Backpack.,Drücke Linke Control Taste um Fallschirm zu öffnen.
+OcbParachuteDeployableSchematic,UI,Tooltip,Parachute Backpack Schematic.,Drücke Linke Control Taste um Fallschirm zu öffnen.
+OcbParachuteDeployableSchematicDesc,UI,Tooltip,Parachute Backpack Schematic.,Drücke Linke Control Taste um Fallschirm zu öffnen.

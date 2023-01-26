@@ -1,0 +1,10 @@
+<configs>
+	<append xpath="/recipes">
+
+		<recipe name="OcbParachuteDeployable" count="1" tags="learnable,OcbParachuteDeployableSchematic">
+			<ingredient name="resourceSewingKit" count="10"/>
+			<ingredient name="resourceCloth" count="100"/>
+		</recipe>
+
+	</append>
+</configs>
