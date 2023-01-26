@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9aafab5ec24e3a468cbf65f5c7e23b0, type: 3}
+  m_Name: Parachute
+  m_EditorClassIdentifier: 
+  Path: ..\..\..\Resources\Parachute.unity3d
+  IncludeAssetsFromFolders: 0
+  SearchFoldersRecursively: 0
+  CreateDeterministicAssetBundle: 1
+  AppendHashToAssetBundleName: 1
+  Compression: 1
+  VerboseLogging: 0
+  Objects:
+  - {fileID: 4899931942025050011, guid: c1988810112b6844fabd99222f2131cf, type: 3}

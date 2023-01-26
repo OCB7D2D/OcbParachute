@@ -1,6 +1,6 @@
 @echo off
 
-SET NAME=OcbParachute
+SET NAME=OcbBetterFPV
 
 if not exist build\ (
   mkdir build
