@@ -5,6 +5,17 @@ public class EntityVParachute : EntityDriveable
 
     public static EntityPlayerLocal Deployer = null;
 
+    public string SoundOpen = string.Empty;
+    public string SoundFlutter = string.Empty;
+
+    public override void CopyPropertiesFromEntityClass()
+    {
+        base.CopyPropertiesFromEntityClass();
+        EntityClass ec = EntityClass.list[entityClass];
+        ec.Properties.ParseString("SoundParachuteOpen", ref SoundOpen);
+        ec.Properties.ParseString("SoundParachuteFlutter", ref SoundFlutter);
+    }
+
     public override void Init(int _entityClass)
     {
         base.Init(_entityClass);
@@ -108,7 +119,7 @@ public class EntityVParachute : EntityDriveable
         // Physics.SyncTransforms();
     }
 
-    protected override void SetWheelsForces(float motorTorque, float brakeTorque)
+    protected override void SetWheelsForces(float motorTorque, float motorTorqueBase, float brakeTorque)
     {
     }
 

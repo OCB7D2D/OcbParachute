@@ -1,5 +1,4 @@
-﻿using Platform;
-using UnityEngine;
+﻿using UnityEngine;
 
 class ItemActionDeployParachute : ItemAction
 {
@@ -20,7 +19,12 @@ class ItemActionDeployParachute : ItemAction
     {
         if (!released || IsActionRunning(action)) return;
         if (!(action.invData.holdingEntity is EntityPlayerLocal player)) return;
-        DeployParachute(action, player);
+        if (player.Buffs.HasBuff("buffOcbParachute")) DeployParachute(action, player);
+        else if (player.PlayerUI?.xui?.CollectedItemList is XUiC_CollectedItemList list)
+        {
+            var iv = ItemClass.GetItem("modOcbArmorParachute");
+            if (iv != null) list.AddItemStack(new ItemStack(iv, 0));
+        }
     }
 
     private void DeployParachute(ItemActionData action, EntityPlayerLocal player)

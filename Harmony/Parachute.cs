@@ -1,6 +1,7 @@
-using System.Reflection;
+using Audio;
 using HarmonyLib;
 using Platform;
+using System.Reflection;
 using UnityEngine;
 
 public class OcbParachute : IModApi
@@ -10,8 +11,8 @@ public class OcbParachute : IModApi
 
     public void InitMod(Mod mod)
     {
-        Log.Out("Loading OCB Parachute Patch: " + GetType().ToString());
-        var harmony = new Harmony(GetType().ToString());
+        Log.Out("OCB Harmony Patch: " + GetType().ToString());
+        Harmony harmony = new Harmony(GetType().ToString());
         harmony.PatchAll(Assembly.GetExecutingAssembly());
     }
 
@@ -81,12 +82,14 @@ public class OcbParachute : IModApi
             // Register KeyPress on every frame update
             HasKeyPress |= Input.GetKeyDown(ParachuteHotKey);
         }
+        /*
         static void Postfix(vp_FPController __instance)
         {
             // Fixes jitter when not driving (e.g. when falling in 3rd person view)
             // Note: You may still see a little jitter, but that is from motion blur ;)
-            //__instance.CharacterController.transform.position = __instance.SmoothPosition;
+            __instance.CharacterController.transform.position = __instance.SmoothPosition;
         }
+        */
     }
 
     [HarmonyPatch(typeof(vp_FPController))]
@@ -178,14 +181,19 @@ public class OcbParachute : IModApi
             }
             else
             {
-                var parachute = EntityFactory.CreateEntity(
+                var vehicle = EntityFactory.CreateEntity(
                     id, player.position + Vector3.up,
                     new Vector3(0f, player.rotation.y, 0f)) as EntityVehicle;
-                parachute.SetSpawnerSource(EnumSpawnerSource.StaticSpawner);
-                parachute.SetOwner(PlatformManager.InternalLocalUserIdentifier);
-                parachute.GetVehicle().SetItemValue(item);
-                GameManager.Instance.World.SpawnEntityInWorld(parachute);
-                player.StartAttachToEntity(parachute, 0);
+                vehicle.SetSpawnerSource(EnumSpawnerSource.StaticSpawner);
+                vehicle.SetOwner(PlatformManager.InternalLocalUserIdentifier);
+                vehicle.GetVehicle().SetItemValue(item);
+                GameManager.Instance.World.SpawnEntityInWorld(vehicle);
+                player.StartAttachToEntity(vehicle, 0);
+                if (vehicle is EntityVParachute parachute)
+                {
+                    Manager.Play(vehicle, parachute.SoundOpen);
+                    Manager.Play(vehicle, parachute.SoundFlutter);
+                }
             }
         }
     }

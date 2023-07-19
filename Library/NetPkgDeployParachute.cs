@@ -7,22 +7,24 @@
         // Code below is copied 1 to 1 from original
         // Only change: we keep a reference to player
         if (_world == null) return;
-        EntityVehicle entity = (EntityVehicle)EntityFactory.CreateEntity(this.entityType, this.pos, this.rot);
-        entity.SetSpawnerSource(EnumSpawnerSource.StaticSpawner);
-        entity.GetVehicle().SetItemValue(this.itemValue.Clone());
-        var player = (GameManager.Instance.World.GetEntity(this.entityThatPlaced) as EntityPlayer);
-        if (player != null)
+        if (EntityFactory.CreateEntity(entityType, pos, rot) is EntityVehicle entity)
         {
-            entity.Spawned = true;
-            ClientInfo clientInfo = ConnectionManager.Instance.Clients.ForEntityId(entityThatPlaced);
-            entity.SetOwner(clientInfo.InternalId);
+            entity.SetSpawnerSource(EnumSpawnerSource.StaticSpawner);
+            entity.GetVehicle().SetItemValue(itemValue.Clone());
+            var player = (GameManager.Instance.World.GetEntity(entityThatPlaced) as EntityPlayer);
+            if (player != null)
+            {
+                entity.Spawned = true;
+                ClientInfo clientInfo = ConnectionManager.Instance.Clients.ForEntityId(entityThatPlaced);
+                entity.SetOwner(clientInfo.InternalId);
+            }
+            _world.SpawnEntityInWorld(entity);
+            entity.bPlayerStatsChanged = true;
+            // Following our custom additions
+            if (player == null) return;
+            if (entity == null) return;
+            // Attach to parachute right away
+            player.StartAttachToEntity(entity, 0);
         }
-        _world.SpawnEntityInWorld((Entity)entity);
-        entity.bPlayerStatsChanged = true;
-        // Following our custom additions
-        if (player == null) return;
-        if (entity == null) return;
-        // Attach to parachute right away
-        player.StartAttachToEntity(entity, 0);
     }
 }
