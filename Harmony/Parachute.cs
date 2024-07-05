@@ -40,6 +40,20 @@ public class OcbParachute : IModApi
         }
     }
 
+    // Fix bug with vanilla when we remove parachute
+    // Game wants to save waypoints for all vehicles
+    // But the parachute already instantly despawned
+    [HarmonyPatch(typeof(XUiC_MapArea))]
+    [HarmonyPatch("CreateVehicleLastKnownWaypoint")]
+    public class XUiC_MapArea_CreateVehicleLastKnownWaypoint
+    {
+        static bool Prefix(EntityVehicle _vehicle)
+        {
+            // Skip this for the parachute vehicle
+            return !(_vehicle is EntityVParachute);
+        }
+    }
+
     // Hide some stuff from UI for parachutes
     [HarmonyPatch(typeof(XUiC_HUDStatBar))]
     [HarmonyPatch("GetBindingValue")]
@@ -103,7 +117,6 @@ public class OcbParachute : IModApi
             bool ___m_Grounded,
             ref float ___m_FallSpeed,
             ref float ___m_FallImpact,
-            ref float ___m_NonRetardedFallSpeed,
             ref Vector3 ___m_ExternalForce,
             ref Vector3 ___m_MoveDirection,
             vp_FPController __instance)
@@ -122,7 +135,7 @@ public class OcbParachute : IModApi
             // Check if Tooltip should be shown when falling too fast
             else if (EntityVParachute.Deployer == null)
             {
-                if (___m_NonRetardedFallSpeed < -0.25f && TooltipShown == false)
+                if (___m_FallSpeed < -0.25f && TooltipShown == false)
                 {
                     GameManager.ShowTooltip(
                         XUiM_Player.GetPlayer() as EntityPlayerLocal,
@@ -142,7 +155,6 @@ public class OcbParachute : IModApi
                 WasPressed = IsPressed;
                 IsPressed = false;
             }
-
             // Check if parachute was toggled mid air
             if (___m_Grounded)
             {
@@ -153,7 +165,7 @@ public class OcbParachute : IModApi
             }
             else if (EntityVParachute.Deployer == null)
             {
-                if (IsPressed && !WasPressed && ___m_NonRetardedFallSpeed < -0.15f)
+                if (IsPressed && !WasPressed && ___m_FallSpeed < -0.15f)
                 {
                     DeployParachute(player);
                 }

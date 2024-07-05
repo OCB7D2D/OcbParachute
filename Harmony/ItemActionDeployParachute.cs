@@ -34,7 +34,7 @@ class ItemActionDeployParachute : ItemAction
         // Load the parachute vehicle only once
         if (EntityVParachute.Deployer != null) return;
         // Only deploy if we have a bit of speed to actually deploy it
-        if (player.vp_FPController.m_NonRetardedFallSpeed > -0.15f) return;
+        if (player.vp_FPController.m_FallSpeed > -0.15f) return;
         // Reduce item by one if option is set
         if (ConsumeItem) action.invData.holdingEntity
                 .inventory.DecHoldingItem(1);

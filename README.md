@@ -1,4 +1,4 @@
-# OCB Parachute Mod - 7 Days to Die (A21) Addon
+# OCB Parachute Mod - 7 Days to Die (V1.0 exp) Addon
 
 Adds a Parachute you can deploy when Mid-Air. Unlocked with
 Armor Craftin Skill Level 50. You need to craft the Backpack
@@ -13,11 +13,17 @@ Required on client and server for multiplayer (WIP).
 
 ## Download and Install
 
-Simply [download here from GitHub][2] and put into your A21 Mods folder:
+End-Users are encouraged to download my mods from [NexusMods][5].  
+Every download there helps me to buy stuff for mod development.
 
-- https://github.com/OCB7D2D/OcbParachute/releases (master branch)
+Otherwise please use one of the [official releases][2] here.  
+Only clone or download the repo if you know what you do!
 
 ## Changelog
+
+### Version 0.5.0
+
+- First compatibility with V1.0 (exp)
 
 ### Version 0.4.0
 
@@ -38,12 +44,8 @@ Simply [download here from GitHub][2] and put into your A21 Mods folder:
 
 - Initial work in progress version
 
-## Compatibility
-
-Developed initially for version a20.5(b2), updated through A21.0(b324).
-
 [1]: https://github.com/OCB7D2D/OcbParachute
 [2]: https://github.com/OCB7D2D/OcbParachute/releases
 [3]: https://github.com/OCB7D2D/OcbParachute/actions/workflows/ci.yml
 [4]: https://github.com/OCB7D2D/OcbParachute/actions/workflows/ci.yml/badge.svg
-
+[5]: https://www.nexusmods.com/7daystodie/mods/2280

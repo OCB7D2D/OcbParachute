@@ -32,19 +32,19 @@ public class EntityVParachute : EntityDriveable
         return info;
     }
 
-    protected override void HandleNavObject()
+    public override void HandleNavObject()
     {
         // Don't show any nav object
     }
 
-    protected override void DetachEntity(Entity _other)
+    public override void DetachEntity(Entity _other)
     {
         Deployer = null;
         base.DetachEntity(_other);
         ForceDespawn();
     }
 
-    protected override void Update()
+    public override void Update()
     {
         base.Update();
         // Check if we have an attached player to update physics?
@@ -53,7 +53,7 @@ public class EntityVParachute : EntityDriveable
             vp_FPCamera cam = player.vp_FPCamera;
             vp_FPController ctr = player.vp_FPController;
             transform.position = cam.DrivingPosition + Vector3.down * 2;
-            ctr.m_NonRetardedFallSpeed = vehicleRB.velocity.y * 2f;
+            ctr.m_FallSpeed = vehicleRB.velocity.y * 2f;
         }
         else if (ConnectionManager.Instance.IsServer && !IsDriven())
         {
@@ -72,7 +72,7 @@ public class EntityVParachute : EntityDriveable
 
     // protected override void Awake() { base.Awake(); }
 
-    protected override void PhysicsInputMove()
+    public override void PhysicsInputMove()
     {
 
         if (vehicleRB == null) return;
@@ -119,11 +119,11 @@ public class EntityVParachute : EntityDriveable
         // Physics.SyncTransforms();
     }
 
-    protected override void SetWheelsForces(float motorTorque, float motorTorqueBase, float brakeTorque)
+    public override void SetWheelsForces(float motorTorque, float motorTorqueBase, float brakeTorque)
     {
     }
 
-    protected override void UpdateWheelsSteering()
+    public override void UpdateWheelsSteering()
     {
     }
 
