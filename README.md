@@ -21,6 +21,11 @@ Only clone or download the repo if you know what you do!
 
 ## Changelog
 
+
+### Version 0.5.1
+
+- Recompile for 7D2D V1.2 stable
+
 ### Version 0.5.0
 
 - First compatibility with V1.0 (exp)
