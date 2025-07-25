@@ -44,10 +44,10 @@ public class OcbParachute : IModApi
     // Game wants to save waypoints for all vehicles
     // But the parachute already instantly despawned
     [HarmonyPatch(typeof(XUiC_MapArea))]
-    [HarmonyPatch("CreateVehicleLastKnownWaypoint")]
-    public class XUiC_MapArea_CreateVehicleLastKnownWaypoint
+    [HarmonyPatch("RefreshVehiclePositionWaypoint")]
+    public class XUiC_MapArea_RefreshVehiclePositionWaypoint
     {
-        static bool Prefix(EntityVehicle _vehicle)
+        static bool Prefix(EntityVehicle _vehicle, bool _unloaded)
         {
             // Skip this for the parachute vehicle
             return !(_vehicle is EntityVParachute);

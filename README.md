@@ -1,4 +1,4 @@
-# OCB Parachute Mod - 7 Days to Die (V1.0) Addon
+# OCB Parachute Mod - 7 Days to Die (V2.0) Addon
 
 Adds a Parachute you can deploy when Mid-Air. Unlocked with
 Armor Craftin Skill Level 50. You need to craft the Backpack
@@ -21,6 +21,9 @@ Only clone or download the repo if you know what you do!
 
 ## Changelog
 
+### Version 0.6.0
+
+- Update for 7D2D V2.0 (b295)
 
 ### Version 0.5.1
 

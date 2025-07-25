@@ -119,7 +119,7 @@ public class EntityVParachute : EntityDriveable
         // Physics.SyncTransforms();
     }
 
-    public override void SetWheelsForces(float motorTorque, float motorTorqueBase, float brakeTorque)
+    public override void SetWheelsForces(float motorTorque, float motorTorqueBase, float brakeTorque, float _frictionPercent)
     {
     }
 
