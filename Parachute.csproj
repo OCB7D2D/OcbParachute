@@ -49,6 +49,9 @@
     <Reference Include="LogLibrary">
       <HintPath>$(PATH_7D2D_MANAGED)\LogLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="mscorlib">
+      <HintPath>$(PATH_7D2D_MANAGED)\mscorlib.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <HintPath>$(PATH_7D2D_MANAGED)\System.dll</HintPath>
     </Reference>
