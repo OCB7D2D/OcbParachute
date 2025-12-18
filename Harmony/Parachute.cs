@@ -1,6 +1,7 @@
 using Audio;
 using HarmonyLib;
 using Platform;
+using System;
 using System.Reflection;
 using UnityEngine;
 
@@ -40,6 +41,24 @@ public class OcbParachute : IModApi
         }
     }
 
+    // Ensure to call methods to check for ground collision
+    // Triggers the same code that was active before v2.5
+    [HarmonyPatch(typeof(vp_FPController))]
+    [HarmonyPatch("FixedUpdate")]
+    public class vp_FPController_FixedUpdate
+    {
+        static void Prefix(vp_FPController __instance)
+        {
+            if ((double)Time.timeScale == 0.0) return;
+            if (!__instance.Player.Driving.Active) return;
+            if (__instance.localPlayer.AttachedToEntity is EntityVParachute)
+            {
+                __instance.FixedMove();
+                __instance.UpdateCollisions();
+            }
+        }
+    }
+
     // Fix bug with vanilla when we remove parachute
     // Game wants to save waypoints for all vehicles
     // But the parachute already instantly despawned
@@ -56,23 +75,23 @@ public class OcbParachute : IModApi
 
     // Hide some stuff from UI for parachutes
     [HarmonyPatch(typeof(XUiC_HUDStatBar))]
-    [HarmonyPatch("GetBindingValue")]
-    public class XUiC_HUDStatBar_GetBindingValue
+    [HarmonyPatch("GetBindingValueInternal")]
+    public class XUiC_HUDStatBar_GetBindingValueInternal
     {
         static bool Prefix(
-            ref string value,
-            string bindingName,
+            ref string _value,
+            string _bindingName,
             XUiC_HUDStatBar __instance,
             HUDStatTypes ___statType,
             ref bool __result)
         {
-            if (bindingName == "statvisible")
+            if (_bindingName == "statvisible")
             {
                 if (___statType != HUDStatTypes.VehicleFuel)
                 {
-                    if (__instance.Vehicle is EntityVParachute)
+                    if (__instance.vehicle is EntityVParachute)
                     {
-                        value = "false";
+                        _value = "false";
                         __result = true;
                         return false;
                     }
