@@ -102,6 +102,7 @@
     <Compile Include="Library\EntityVParachute.cs" />
     <Compile Include="Library\NetPkgDespawnParachute.cs" />
     <Compile Include="Library\NetPkgDeployParachute.cs" />
+    <Compile Include="Library\XUiC_ParachuteInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\entityclasses.xml" />
@@ -112,6 +113,8 @@
     <Content Include="Config\Localization.txt" />
     <Content Include="Config\recipes.xml" />
     <Content Include="Config\vehicles.xml" />
+    <Content Include="Config\XUi\windows.xml" />
+    <Content Include="Config\XUi\xui.xml" />
     <Content Include="ModInfo.xml" />
   </ItemGroup>
   <ItemGroup>

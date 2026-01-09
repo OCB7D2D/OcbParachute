@@ -1,0 +1,31 @@
+﻿<configs>
+  <append xpath="/windows">
+    <window name="windowParachuteInfo" anchor="LeftCenter" width="300" height="600" visible="true" normal_color="[iconColor]" cursor_area="true">
+      <rect pos="0,300">
+        <sprite depth="1" name="background" color="[darkGrey]" type="sliced" pos="0,0" width="300" height="600"/>
+        <label text="Local forward: {local-speed-forward}" width="300" height="30" pos="8,-8"/>
+        <label text="Local sideward: {local-speed-sideward}" width="300" height="30" pos="8,-38"/>
+        <label text="Local downward: {local-speed-downward}" width="300" height="30" pos="8,-68"/>
+        
+        <label text="World forward: {local-speed-forward}" width="300" height="30" pos="8,-98"/>
+        <label text="World sideward: {local-speed-sideward}" width="300" height="30" pos="8,-128"/>
+        <label text="World downward: {local-speed-downward}" width="300" height="30" pos="8,-158"/>
+
+        <label text="Rot X: {local-rotation-x}" width="300" height="30" pos="8,-188"/>
+        <label text="Rot Y: {local-rotation-y}" width="300" height="30" pos="8,-218"/>
+        <label text="Rot Z: {local-rotation-z}" width="300" height="30" pos="8,-248"/>
+
+        <label text="Rot X: {world-rotation-x}" width="300" height="30" pos="8,-278"/>
+        <label text="Rot Y: {world-rotation-y}" width="300" height="30" pos="8,-308"/>
+        <label text="Rot Z: {world-rotation-z}" width="300" height="30" pos="8,-338"/>
+
+        <label text="Force Uplift: {force-uplift}" width="300" height="30" pos="8,-378"/>
+        <label text="Attack Angle: {angle-of-attack}" width="300" height="30" pos="8,-408"/>
+        <label text="Lift Coeff: {lift-coeff}" width="300" height="30" pos="8,-438"/>
+        <label text="Drag Coeff: {drag-coeff}" width="300" height="30" pos="8,-468"/>
+
+        <label text="In Strafe: {input-strafe}" width="300" height="30" pos="8,-508"/>
+      </rect>
+    </window>
+  </append>
+</configs>

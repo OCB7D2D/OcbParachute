@@ -215,11 +215,18 @@ public class OcbParachute : IModApi
                 var vehicle = EntityFactory.CreateEntity(
                     id, player.position + Vector3.up,
                     new Vector3(0f, player.rotation.y, 0f)) as EntityVehicle;
+                vehicle.vehicleRB.velocity = player.vp_FPController.CharacterController.velocity;
                 vehicle.SetSpawnerSource(EnumSpawnerSource.StaticSpawner);
                 vehicle.SetOwner(PlatformManager.InternalLocalUserIdentifier);
                 vehicle.GetVehicle().SetItemValue(item);
+                Log.Out("Deployed with fall speed at {0}",
+                    player.vp_FPController.m_FallSpeed);
+                Log.Out("Deployed with RB {0}",
+                    player.vp_FPCamera.FirstRigidBody.velocity);
                 GameManager.Instance.World.SpawnEntityInWorld(vehicle);
                 player.StartAttachToEntity(vehicle, 0);
+                Log.Out("Deployed now with RB {0}",
+                    player.vp_FPController.CharacterController.velocity);
                 if (vehicle is EntityVParachute parachute)
                 {
                     Manager.Play(vehicle, parachute.SoundOpen);

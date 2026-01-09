@@ -36,10 +36,15 @@ class ItemActionDeployParachute : ItemAction
         // Only deploy if we have a bit of speed to actually deploy it
         if (player.vp_FPController.m_FallSpeed > -0.15f) return;
         // Reduce item by one if option is set
-        if (ConsumeItem) action.invData.holdingEntity
-                .inventory.DecHoldingItem(1);
+        // if (ConsumeItem) action.invData.holdingEntity
+        //         .inventory.DecHoldingItem(1);
         // Execute parachute deployment
         OcbParachute.DeployParachute(player);
+
+        var xui = LocalPlayerUI.GetUIForPlayer(player).xui;
+        var wm = xui.playerUI.windowManager;
+        wm.Open("parachuteInfo", false, true/*, true, false*/);
+
     }
 
 }

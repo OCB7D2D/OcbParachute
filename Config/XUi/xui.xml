@@ -1,0 +1,8 @@
+﻿<configs>
+  <append xpath="/xui/ruleset[@name='default']">
+    <window_group name="parachuteInfo" actionSet="false" controller="XUiC_ParachuteInfo, Parachute">
+      <window name="windowParachuteInfo"/>
+    </window_group>
+
+  </append>
+</configs>
